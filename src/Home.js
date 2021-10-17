@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from 'react';
-import { MDBInput, MDBCol } from "mdbreact";
+import { MDBInput, MDBCol, Table } from "mdbreact";
 import styled from 'styled-components'; 
 
 const BreweryTitle = styled.li`
@@ -26,8 +26,13 @@ const BreweryContainer = styled.div`
   background: #f2f2f2;
   border-radius: 10px;
   padding: 10px;
-  max-height: 200px;
+  max-height: 600px;
   overflow: scroll;
+  & > p{
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
 `
 
 const Home = () => {
@@ -36,11 +41,6 @@ const [error, setError] = useState(null);
     const [breweries, setBreweries] = useState([]);
     const [search, setSearch] = useState('');
     const [breweryView, setBreweryView] = useState('none');
-
-    useEffect(()=>{
-      console.log('breweries');
-      console.log(breweries);
-    }, [breweries])
 
     useEffect(() => {
         fetch("https://api.openbrewerydb.org/breweries/search?query=")
@@ -85,6 +85,7 @@ if (error) {
                   // because we dont want to overwhelm it with queries. It could
                   // happen on a change event but that would significantly increase 
                   // the number of queries
+                  setBreweryView('none')
                   searchBreweries()
                 }
               }}/>
@@ -104,7 +105,30 @@ if (error) {
 
             {breweryView !== 'none' && (
               <BreweryContainer>
-                {breweries[breweryView]?.name}
+                <p>{breweries[breweryView]?.name}</p>
+
+                <Table striped bordered hover>
+                  <tbody>
+                    <tr>
+                      <td>Street</td>
+                      <td>{breweries[breweryView]?.street}</td>
+                    </tr>
+                    <tr>
+                      <td>City</td>
+                      <td>{breweries[breweryView]?.city}</td>
+                    </tr>
+                    <tr>
+                      <td>State</td>
+                      <td>{breweries[breweryView]?.state}</td>
+                    </tr>
+                    <tr>
+                      <td>Postal Code</td>
+                      <td>{breweries[breweryView]?.postal_code}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+
+
               </BreweryContainer>
             )}
           </div>
