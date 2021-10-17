@@ -1,3 +1,9 @@
+This is a simple application that uses the www.openbrewerydb.org API so that you can search through their breweries by entering a search term. You will get a list of breweries that match the search term.
+
+From the list of matching breweries, you can click them which will open a box showing their address and full name.
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
