@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from 'react';
-import { MDBInput, MDBCol, Table } from "mdbreact";
+import { MDBInput, MDBRow as Row, Table } from "mdbreact";
 import styled from 'styled-components'; 
 
 const BreweryTitle = styled.li`
@@ -32,6 +32,14 @@ const BreweryContainer = styled.div`
     font-weight: bold;
     font-size: 16px;
     margin-bottom: 10px;
+  }
+`
+
+const MDBRow = styled(Row)`
+  display: flex;
+  justify-content: space-between;
+  & > button {
+    height: 40px;
   }
 `
 
@@ -71,6 +79,31 @@ const [error, setError] = useState(null);
                 }
             )
     }
+    const breweryInfoTable = (
+    <BreweryContainer>
+      <p>{breweries[breweryView]?.name}</p>
+
+      <Table striped bordered hover>
+        <tbody>
+          <tr>
+            <td>Street</td>
+            <td>{breweries[breweryView]?.street}</td>
+          </tr>
+          <tr>
+            <td>City</td>
+            <td>{breweries[breweryView]?.city}</td>
+          </tr>
+          <tr>
+            <td>State</td>
+            <td>{breweries[breweryView]?.state}</td>
+          </tr>
+          <tr>
+            <td>Postal Code</td>
+            <td>{breweries[breweryView]?.postal_code}</td>
+          </tr>
+        </tbody>
+      </Table>
+    </BreweryContainer>)
 if (error) {
         return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -78,7 +111,7 @@ if (error) {
     } else {
         return (
           <div>
-            <MDBCol md="6">
+            <MDBRow md="6">
               <MDBInput hint="Search" type="text" containerClass="mt-0" onChange={e => setSearch(e.currentTarget.value)} onKeyDown={e=>{
                 if (e.key === 'Enter') {
                   // We only perform an inquiry on the API when enter is pressed
@@ -89,7 +122,8 @@ if (error) {
                   searchBreweries()
                 }
               }}/>
-            </MDBCol>
+              <button type="button" class="btn btn-primary" onClick={()=>setBreweryView('none')}>Home</button>
+            </MDBRow>
             {breweryView === 'none' && (
               <BreweriesContainer>
                 <BreweryList>
@@ -103,34 +137,7 @@ if (error) {
               </BreweriesContainer>
             )}
 
-            {breweryView !== 'none' && (
-              <BreweryContainer>
-                <p>{breweries[breweryView]?.name}</p>
-
-                <Table striped bordered hover>
-                  <tbody>
-                    <tr>
-                      <td>Street</td>
-                      <td>{breweries[breweryView]?.street}</td>
-                    </tr>
-                    <tr>
-                      <td>City</td>
-                      <td>{breweries[breweryView]?.city}</td>
-                    </tr>
-                    <tr>
-                      <td>State</td>
-                      <td>{breweries[breweryView]?.state}</td>
-                    </tr>
-                    <tr>
-                      <td>Postal Code</td>
-                      <td>{breweries[breweryView]?.postal_code}</td>
-                    </tr>
-                  </tbody>
-                </Table>
-
-
-              </BreweryContainer>
-            )}
+            {breweryView !== 'none' && breweryInfoTable}
           </div>
         );
     }
